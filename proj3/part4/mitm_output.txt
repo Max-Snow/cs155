@@ -1,0 +1,3 @@
+Attaching to part4_mitm_1
+[36mmitm_1    |[0m tcpdump: data link type LINUX_SLL2
+[36mmitm_1    |[0m tcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes

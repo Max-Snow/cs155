@@ -1,0 +1,4 @@
+1. RST
+2. NIL
+3. REQUESTS=<POST>, <OPTIONS>, <PROPFIND>
+4. <Source Port>, <TCP payload>
