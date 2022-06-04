@@ -1,3 +1,30 @@
 Attaching to part4_mitm_1
 [36mmitm_1    |[0m tcpdump: data link type LINUX_SLL2
 [36mmitm_1    |[0m tcpdump: listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes
+[36mmitm_1    |[0m MITM:   Intercepted Credentials
+[36mmitm_1    |[0m         Username:  Sabrina
+[36mmitm_1    |[0m         Password:  PleaseComeBack
+[36mmitm_1    |[0m 2022/06/03 23:07:11 http: panic serving 10.38.8.4:36896: runtime error: invalid memory address or nil pointer dereference
+[36mmitm_1    |[0m goroutine 50 [running]:
+[36mmitm_1    |[0m net/http.(*conn).serve.func1()
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/server.go:1825 +0xbf
+[36mmitm_1    |[0m panic({0x6f9ba0, 0x9c1be0})
+[36mmitm_1    |[0m 	/usr/local/go/src/runtime/panic.go:844 +0x258
+[36mmitm_1    |[0m net/http.(*Client).deadline(0x28?)
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/client.go:189 +0x14
+[36mmitm_1    |[0m net/http.(*Client).do(0x0, 0xc0001ee300)
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/client.go:611 +0x225
+[36mmitm_1    |[0m net/http.(*Client).Do(...)
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/client.go:593
+[36mmitm_1    |[0m main.handleHTTP({0x7f2090, 0xc000232000}, 0xc0001ee200)
+[36mmitm_1    |[0m 	/p4/mitm.go:463 +0xa5
+[36mmitm_1    |[0m net/http.HandlerFunc.ServeHTTP(0x6e5840?, {0x7f2090?, 0xc000232000?}, 0xc0001da1b0?)
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/server.go:2084 +0x2f
+[36mmitm_1    |[0m net/http.(*ServeMux).ServeHTTP(0x0?, {0x7f2090, 0xc000232000}, 0xc0001ee200)
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/server.go:2462 +0x149
+[36mmitm_1    |[0m net/http.serverHandler.ServeHTTP({0x7f0868?}, {0x7f2090, 0xc000232000}, 0xc0001ee200)
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/server.go:2916 +0x43b
+[36mmitm_1    |[0m net/http.(*conn).serve(0xc0003283c0, {0x7f2258, 0xc00008b200})
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/server.go:1966 +0x5d7
+[36mmitm_1    |[0m created by net/http.(*Server).Serve
+[36mmitm_1    |[0m 	/usr/local/go/src/net/http/server.go:3071 +0x4db

